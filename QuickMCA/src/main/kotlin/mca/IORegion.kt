@@ -33,6 +33,7 @@ object IORegion {
 	 * The offset represents the position of the chunk in the file.
 	 * @param file The region file
 	 * @return The header data
+	 * @see <a href="https://minecraft.wiki/w/Region_file_format#Header">Region file format (Header)</a>
 	 */
 	private fun loadHeader(file: RandomAccessFile): HeaderData {
 		// Retrieve chunk offsets
