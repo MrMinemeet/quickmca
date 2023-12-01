@@ -1,6 +1,22 @@
 import java.io.File
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import mca.IORegion
 
 fun main(args: Array<String>) {
-	IORegion.readRegion(File("world/region/r.-1.-1.mca"))
+	val executor = Executors.newFixedThreadPool(12)
+
+	val startTime = System.currentTimeMillis()
+	File("world/region").listFiles()
+		?.forEach {
+			executor.execute {
+				IORegion.readRegion(it)
+			}
+		}
+
+	executor.shutdown()
+	executor.awaitTermination(1, TimeUnit.MINUTES)
+
+	val endTime = System.currentTimeMillis()
+	println("Time: ${endTime - startTime}ms")
 }
