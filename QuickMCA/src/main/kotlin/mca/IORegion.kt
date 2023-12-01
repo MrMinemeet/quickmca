@@ -22,7 +22,10 @@ object IORegion {
 		RandomAccessFile(regionFile, "r").use { file ->
 			// Get Data from header (first 8KiB)
 			val headerData = loadHeader(file)
+			val chunkData = loadChunks(file, headerData)
+
 			println(headerData)
+
 		}
 
 		return Region(rPosX, rPosY)
@@ -62,6 +65,24 @@ object IORegion {
 			timestamps[i] = file.readInt()
 		}
 		return HeaderData(offsets, sectorCounts, timestamps)
+	}
+
+	/**
+	 * Loads all chunks from the region file.
+	 * @param file The region file
+	 * @param headerData The header data
+	 * @return An array of chunks
+	 */
+	private fun loadChunks(file: RandomAccessFile, headerData: HeaderData): Array<Chunk> {
+		val chunks = mutableListOf<Chunk>()
+
+		for ((offset, sectors, timestamp) in headerData) {
+			val chunk = Chunk(timestamp)
+			chunk.loadChunk(file, offset, sectors)
+			chunks.add(chunk)
+		}
+
+		return chunks.toTypedArray()
 	}
 
 	/**
@@ -107,5 +128,22 @@ private data class HeaderData(
 			Sector count: ${sectorCounts.joinToString(", ")}
 			Timestamps: ${timestamps.joinToString(", ")}
 		""".trimIndent()
+	}
+
+	/**
+	 * @return An iterator over the elements of this object. The elements are represented as a Triple.
+	 */
+	operator fun iterator(): Iterator<Triple<Int, Byte, Int>> = object : Iterator<Triple<Int, Byte, Int>> {
+		private var index = 0
+
+		override fun hasNext(): Boolean = index < CHUNKS_IN_REGION
+
+		override fun next(): Triple<Int, Byte, Int> {
+			val offset = offsets[index]
+			val sectorCount = sectorCounts[index]
+			val timestamp = timestamps[index]
+			index++
+			return Triple(offset, sectorCount, timestamp)
+		}
 	}
 }
