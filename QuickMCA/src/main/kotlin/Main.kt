@@ -1,7 +1,22 @@
-fun main(args: Array<String>) {
-	println("Hello World!")
+import java.io.File
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import mca.IORegion
 
-	// Try adding program arguments via Run/Debug configuration.
-	// Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-	println("Program arguments: ${args.joinToString()}")
+fun main(args: Array<String>) {
+	val executor = Executors.newFixedThreadPool(12)
+
+	val startTime = System.currentTimeMillis()
+	File("world/region").listFiles()
+		?.forEach {
+			executor.execute {
+				IORegion.readRegion(it)
+			}
+		}
+
+	executor.shutdown()
+	executor.awaitTermination(1, TimeUnit.MINUTES)
+
+	val endTime = System.currentTimeMillis()
+	println("Time: ${endTime - startTime}ms")
 }
