@@ -26,6 +26,6 @@ enum class CompressionType(
 		/**
 		 * Returns the enum entry matching the value.
 		 */
-		fun getFromID(value: Byte): CompressionType = entries.first { t -> t.value == value }
+		fun getFromID(value: Byte): CompressionType? = entries.firstOrNull { t -> t.value == value }
 	}
 }

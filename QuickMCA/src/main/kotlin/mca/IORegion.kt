@@ -22,10 +22,10 @@ object IORegion {
 		RandomAccessFile(regionFile, "r").use { file ->
 			// Get Data from header (first 8KiB)
 			val headerData = loadHeader(file)
-			val chunkData = loadChunks(file, headerData)
+			val chunks = loadChunks(file, headerData)
 
 			println(headerData)
-
+			println("Chunk:\n${chunks.joinToString("\n")}")
 		}
 
 		return Region(rPosX, rPosY)

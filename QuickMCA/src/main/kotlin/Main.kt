@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 import mca.IORegion
 
 fun main(args: Array<String>) {
-	val executor = Executors.newFixedThreadPool(12)
+	val executor = Executors.newFixedThreadPool(1)
 
 	val startTime = System.currentTimeMillis()
 	File("world/region").listFiles()
