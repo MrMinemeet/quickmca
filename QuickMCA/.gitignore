@@ -43,6 +43,7 @@ bin/
 
 # Minecraft world files and folders
 world/
+*.nbt
 
 # Build system
 gradle/

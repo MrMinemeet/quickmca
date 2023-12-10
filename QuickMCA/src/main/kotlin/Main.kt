@@ -7,12 +7,14 @@ fun main(args: Array<String>) {
 	val executor = Executors.newFixedThreadPool(1)
 
 	val startTime = System.currentTimeMillis()
-	File("world/region").listFiles()
+	/*File("world/region").listFiles()
 		?.forEach {
 			executor.execute {
 				IORegion.readRegion(it)
 			}
 		}
+	 */
+	IORegion.readRegion(File("world/region/r.0.0.mca"))
 
 	executor.shutdown()
 	executor.awaitTermination(1, TimeUnit.MINUTES)

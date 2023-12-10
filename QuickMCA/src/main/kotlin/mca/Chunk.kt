@@ -1,7 +1,9 @@
 package mca
 
 import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.RandomAccessFile
 import util.CompressionType
@@ -35,6 +37,13 @@ class Chunk(private val lastUpdate: Int) {
 		for(i in 0..<actualChunkDataLength) {
 			data[i] = bis.read().toByte()
 		}
+
+		// write compressed data to file
+		// TODO: Remove this (just for testing)
+		val bos = BufferedOutputStream(FileOutputStream("chunk.nbt"))
+		bos.write(data)
+		bos.close()
+
 
 
 
